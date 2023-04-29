@@ -1,8 +1,33 @@
 .keyboard{
     margin: 0 auto;
     margin-top: 20px;
-    width: 900px;
+    width: 1000px;
     height: 400px;
     border: 1px solid black;
+    display: flex;
+    flex-wrap: wrap;
+}
 
+.button{
+    display: inline-block;
+    padding: 5px;
+    margin: 5px 5px;
+    min-width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    background-color: rgb(158, 158, 158);
+    color: white;
+}
+
+.row{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.space{
+    flex-basis: 200%;
+}
+.special-button-color{
+    background-color: rgb(82, 80, 80);
 }
