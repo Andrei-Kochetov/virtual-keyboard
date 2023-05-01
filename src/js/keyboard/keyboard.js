@@ -138,15 +138,18 @@ let keyBoard;
 let languageDefoult = false;
 
 // Массив keycode без fn
-let keyCode = [192, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 189, 187, 8, 9, 81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221, 220, 20, 65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222, 13, 16, 90, 88, 67, 86, 66, 78, 77, 188, 190, 191, 38, 46, 17, 91, 18, 32, 37, 40, 39];
-/* document.addEventListener('keydown', (e)=>{
-    keyCode.push(e.keyCode)
-    console.log(keyCode)
-}) */
+let keyCode = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 192, 189, 187, 8, 9, 81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221, 220, 20, 65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222, 13, 16, 90, 88, 67, 86, 66, 78, 77, 188, 190, 191, 38, 46, 17, 91, 18, 32, 37, 40, 39];
+
+let capsKeyCodeRu = [192, 81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221, 65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222, 90, 88, 67, 86, 66, 78, 77, 188, 190];
+let capsKeyCodeEn = [81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 65, 83, 68, 70, 71, 72, 74, 75, 76, 90, 88, 67, 86, 66, 78, 77]
+
+/*  document.addEventListener('keydown', (e)=>{
+    capsKeyCodeEn.push(e.keyCode)
+    console.log(capsKeyCodeEn)
+})  */
 
 
 function createKeyBoard() {
-
 
   //создание виртуальной клавиатуры
   keyBoard = document.createElement('div');
@@ -206,7 +209,70 @@ function createKeyBoard() {
         textArea.value = textArea.value.slice(0,-1);
     }
 
+    if(e.target.innerText === 'Space'){
+        textArea.value += ' ';
+    }
+
+    if(e.target.innerText === 'Tab'){
+        textArea.value += '    ';
+    }
+
+    if(e.target.innerText === 'Delete'){
+        textArea.value = '';
+    }
+
+    if(e.target.innerText === 'Capslock'){
+        btns[28].classList.toggle('active');
+        if(btns[28].classList.contains('active')){
+            if(!languageDefoult){
+                onCapsRu();
+              } else{
+                onCapsEn();
+              } 
+        } else{
+            if(!languageDefoult){
+                offCapsRu();
+              } else{
+                offCapsEn();
+              } 
+        }
+
+    }
+
+    if(e.target.innerText === '▲'){
+        textArea.value += '▲';
+    }
+    if(e.target.innerText === '◄'){
+        textArea.value += '◄';
+    }
+    if(e.target.innerText === '▼'){
+        textArea.value += '▼';
+    }
+    if(e.target.innerText === '►'){
+        textArea.value += '►';
+    }
+
   }) 
+
+  document.addEventListener('mousedown',(e)=>{
+    if(e.target.innerText === 'Shift'){
+        if(!languageDefoult){
+            downShiftRu();
+        } else{
+            downShiftEn()
+        }  
+    }
+  })
+
+  document.addEventListener('mouseup',(e)=>{
+    if(e.target.innerText === 'Shift'){
+        if(!languageDefoult){
+            upShiftRu();
+        } else{
+            upShiftEn()
+        }
+    }
+  })
 
   document.addEventListener('keydown',(e)=>{
     const textArea = document.querySelector('textarea');
@@ -233,27 +299,84 @@ function createKeyBoard() {
 
     if(e.key === 'Enter'){
         textArea.value += '\n'
-    }
+    } 
 
     if(e.key === 'Backspace'){
         textArea.value = textArea.value.slice(0,-1);
+    } 
+
+    if(e.key === 'Delete'){
+        textArea.value = '';
     }
-    if(e.code === 'KeyZ'){
-        textArea.value += e.key;
+
+    if(e.key === 'Tab'){
+        e.preventDefault();
+        textArea.value += '    ';
     }
+
+    if(e.key === 'Delete'){
+        textArea.value = '';
+    }
+
+    if(e.code === 'Space'){
+        textArea.value += ' ';
+    }
+
+
+
+
+    if(e.key === 'ArrowUp'){
+        textArea.value += '▲';
+    }
+    if(e.key === 'ArrowLeft'){
+        textArea.value += '◄';
+    }
+    if(e.key === 'ArrowDown'){
+        textArea.value += '▼';
+    }
+    if(e.key === 'ArrowRight'){
+        textArea.value += '►';
+    }
+
+
+    if(e.key === 'CapsLock'){
+        if(e.getModifierState('CapsLock')){
+            btns[28].classList.add('active');
+             if(!languageDefoult){
+              onCapsRu();
+            } else{
+              onCapsEn();
+            }     
+          } else{
+            btns[28].classList.remove('active');
+            if(!languageDefoult){
+              offCapsRu();
+            } else{
+              offCapsEn();
+            } 
+          } 
+    }
+
+
+/*     if( e.target.className === 'button'){
+        e.target.classList.add('active');
+    } */
+
+
 
     for(let i = 0; i < btns.length; i++){
         
-        if(e.keyCode === +btns[i].getAttribute('keycode') &&  btns[i].className === 'button' ){
+        if(e.keyCode === +btns[i].getAttribute('keycode')  &&  btns[i].className === 'button'){
             textArea.value += btns[i].innerText;
         }
+        if(e.keyCode === +btns[i].getAttribute('keycode') && e.key !== 'CapsLock'){
+            btns[i].classList.add('active');
+        }
     } 
-
-    console.log(e.keyCode)
-    console.dir(btns[23].getAttribute('keycode'))
  })
 
   document.addEventListener('keyup',(e)=>{
+    let btns = document.getElementsByClassName('button');
 
     if(e.key === 'Shift'){
         if(!languageDefoult){
@@ -262,6 +385,15 @@ function createKeyBoard() {
             upShiftEn()
         }
     }
+        if( e.target.className === 'button'){
+        e.target.classList.remove('active')
+    } 
+   
+    for(let i = 0; i < btns.length; i++){
+        if(e.keyCode === +btns[i].getAttribute('keycode') && e.key !== 'CapsLock'){
+            btns[i].classList.remove('active');
+        }
+    } 
 
   })
   // добавление класса размера кнопки Space
@@ -277,9 +409,6 @@ function createKeyBoard() {
     let colorBtn = Array.from(btns).filter(el=> el.innerHTML == arrColorBtn[i]);
     colorBtn[0].classList.add('special-button-color');
   }
-
-
-
 }
 
 //Изменение на En Клавиатуру
@@ -335,5 +464,41 @@ function createButton(){
     button.classList.add('button');
     return button;
 }
+
+ function onCapsRu(){
+    const btns = Array.from(document.getElementsByClassName('button'));
+    for(let i = 0; i<btns.length; i++){
+        if(capsKeyCodeRu.includes(+btns[i].getAttribute('keycode'))){
+            btns[i].innerText = btns[i].innerText.toUpperCase();
+        }
+    }
+}
+function offCapsRu(){
+    const btns = Array.from(document.getElementsByClassName('button'));
+    for(let i = 0; i<btns.length; i++){
+        if(capsKeyCodeRu.includes(+btns[i].getAttribute('keycode'))){
+            btns[i].innerText = btns[i].innerText.toLowerCase();
+        }
+    }
+}
+function onCapsEn(){
+    const btns = Array.from(document.getElementsByClassName('button'));
+    for(let i = 0; i<btns.length; i++){
+        if(capsKeyCodeEn.includes(+btns[i].getAttribute('keycode'))){
+            btns[i].innerText = btns[i].innerText.toUpperCase();
+        }
+    }
+}
+function offCapsEn(){
+    const btns = Array.from(document.getElementsByClassName('button'));
+    for(let i = 0; i<btns.length; i++){
+        if(capsKeyCodeEn.includes(+btns[i].getAttribute('keycode'))){
+            btns[i].innerText = btns[i].innerText.toLowerCase();
+        }
+    }
+} 
+
+
+
 
 export { createKeyBoard };
