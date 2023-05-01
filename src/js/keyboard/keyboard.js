@@ -137,16 +137,12 @@ const dataKeyBoardEn = {
 let keyBoard;
 let languageDefoult = false;
 
-// Массив keycode без fn
+// Массив keycode 
 let keyCode = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 192, 189, 187, 8, 9, 81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221, 220, 20, 65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222, 13, 16, 90, 88, 67, 86, 66, 78, 77, 188, 190, 191, 38, 46, 17, 91, 18, 32, 37, 40, 39];
 
+//Массив keyCode для CapsLock 
 let capsKeyCodeRu = [192, 81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221, 65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222, 90, 88, 67, 86, 66, 78, 77, 188, 190];
 let capsKeyCodeEn = [81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 65, 83, 68, 70, 71, 72, 74, 75, 76, 90, 88, 67, 86, 66, 78, 77]
-
-/*  document.addEventListener('keydown', (e)=>{
-    capsKeyCodeEn.push(e.keyCode)
-    console.log(capsKeyCodeEn)
-})  */
 
 
 function createKeyBoard() {
@@ -165,9 +161,11 @@ function createKeyBoard() {
 
   //Создание и добавление кнопок по 5 строкам клавиатуры
   for(let i = 0; i < Object.keys(dataKeyBoardRu).length; i++){
-
     let btn = createButton();
     btn.innerText = `${Object.keys(dataKeyBoardRu)[i]}`;
+    if(localStorage.getItem('lang') == 'en'){
+        btn.innerText = `${Object.keys(dataKeyBoardEn)[i]}`;
+    }
     btn.setAttribute('keycode', keyCode[i]);
 
     if(i < 14){
@@ -278,6 +276,8 @@ function createKeyBoard() {
     const textArea = document.querySelector('textarea');
     let btns = document.getElementsByClassName('button');
 
+    e.preventDefault();
+
     if(e.key === 'Shift'){
         if(!languageDefoult){
             downShiftRu();
@@ -338,7 +338,6 @@ function createKeyBoard() {
         textArea.value += '►';
     }
 
-
     if(e.key === 'CapsLock'){
         if(e.getModifierState('CapsLock')){
             btns[28].classList.add('active');
@@ -356,13 +355,6 @@ function createKeyBoard() {
             } 
           } 
     }
-
-
-/*     if( e.target.className === 'button'){
-        e.target.classList.add('active');
-    } */
-
-
 
     for(let i = 0; i < btns.length; i++){
         
@@ -414,6 +406,7 @@ function createKeyBoard() {
 //Изменение на En Клавиатуру
 function changeEnKeyboard(){
     const btns = document.querySelectorAll('.button');
+    localStorage.setItem('lang', 'en');
     for(let i = 0; i < Object.keys(dataKeyBoardEn).length; i++){
       btns[i].innerText = `${Object.keys(dataKeyBoardEn)[i]}`; 
     }
@@ -422,6 +415,7 @@ function changeEnKeyboard(){
 //Изменение на Ру клавиатуру
 function changeRuKeyboard(){
     const btns = document.querySelectorAll('.button');
+    localStorage.setItem('lang', 'ru');
     for(let i = 0; i < Object.keys(dataKeyBoardRu).length; i++){
       btns[i].innerText = `${Object.keys(dataKeyBoardRu)[i]}`; 
     }
@@ -497,8 +491,5 @@ function offCapsEn(){
         }
     }
 } 
-
-
-
 
 export { createKeyBoard };
